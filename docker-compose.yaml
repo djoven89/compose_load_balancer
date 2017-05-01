@@ -3,28 +3,36 @@ version: '2'
 services:
   db:
     container_name: database
-    image: mio/mysql
+    image: mis_img/mysql:v1
     restart: always
+    ports:
+      - "3360:3306"
     networks:
-      drupal:
+      drupal_stack:
         ipv4_address: 172.20.0.18
     environment:
       MYSQL_ROOT_PASSWORD: docker
       MYSQL_DATABASE: drupal
-      MYSQL_USER: drupal
-      MYSQL_PASSWORD: drupal
+      MYSQL_USER: daniel
+      MYSQL_PASSWORD: daniel
     volumes:
-      - db_data:/var/lib/mysql
+      - mysql_data:/var/lib/mysql
+
 
   nginx:
     container_name: nginx
-    image: my_images/loadbalancer
+    image: mis_img/loadbalancer:v2
     restart: always
     ports:
       - "9090:80"
     networks:
-      drupal:
+      drupal_stack:
         ipv4_address: 172.20.0.19
+    environment:
+      WEB1: 172.20.0.20
+      WEB1: 172.20.0.21
+      WEB1: 172.20.0.22
+      WEB1: 172.20.0.23
 
 
   web1:
@@ -35,8 +43,10 @@ services:
     restart: always
     ports:
       - "9091:80"
+    volumes:
+      - drupal_data:/var/www/html
     networks:
-      drupal:
+      drupal_stack:
         ipv4_address: 172.20.0.20
 
   web2:
@@ -47,8 +57,10 @@ services:
     restart: always
     ports:
       - "9092:80"
+    volumes:
+      - drupal_data:/var/www/html
     networks:
-      drupal:
+      drupal_stack:
         ipv4_address: 172.20.0.21
 
   web3:
@@ -62,16 +74,16 @@ services:
     volumes:
       - drupal_data:/var/www/html
     networks:
-      drupal:
+      drupal_stack:
         ipv4_address: 172.20.0.22
 
 
 volumes:
-  db_data:
+  mysql_data:
   drupal_data:
 
 networks:
-  drupal:
+  drupal_stack:
     driver: bridge
     ipam:
       driver: default
