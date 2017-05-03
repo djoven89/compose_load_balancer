@@ -3,7 +3,7 @@ version: '2'
 services:
   db:
     container_name: database
-    image: mis_img/mysql:v1
+    image: mis_img/mysql:v8
     restart: always
     ports:
       - "3360:3306"
@@ -11,6 +11,7 @@ services:
       drupal_stack:
         ipv4_address: 172.20.0.18
     environment:
+      TZ: Europe/Madrid
       MYSQL_ROOT_PASSWORD: docker
       MYSQL_DATABASE: drupal
       MYSQL_USER: daniel
@@ -29,10 +30,11 @@ services:
       drupal_stack:
         ipv4_address: 172.20.0.19
     environment:
+      TZ: Europe/Madrid
       WEB1: 172.20.0.20
-      WEB1: 172.20.0.21
-      WEB1: 172.20.0.22
-      WEB1: 172.20.0.23
+      WEB2: 172.20.0.21
+      WEB3: 172.20.0.22
+      WEB4: 172.20.0.23
 
 
   web1:
@@ -45,6 +47,8 @@ services:
       - "9091:80"
     volumes:
       - drupal_data:/var/www/html
+    environment:
+      TZ: Europe/Madrid
     networks:
       drupal_stack:
         ipv4_address: 172.20.0.20
@@ -59,6 +63,8 @@ services:
       - "9092:80"
     volumes:
       - drupal_data:/var/www/html
+    environment:
+      TZ: Europe/Madrid
     networks:
       drupal_stack:
         ipv4_address: 172.20.0.21
@@ -73,6 +79,8 @@ services:
       - "9093:80"
     volumes:
       - drupal_data:/var/www/html
+    environment:
+      TZ: Europe/Madrid
     networks:
       drupal_stack:
         ipv4_address: 172.20.0.22
