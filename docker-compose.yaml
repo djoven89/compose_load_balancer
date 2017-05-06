@@ -3,7 +3,7 @@ version: '2'
 services:
   db:
     container_name: database
-    image: mis_img/mysql:v8
+    image: mis_img/mysql
     restart: always
     ports:
       - "3360:3306"
@@ -11,7 +11,6 @@ services:
       drupal_stack:
         ipv4_address: 172.20.0.18
     environment:
-      TZ: Europe/Madrid
       MYSQL_ROOT_PASSWORD: docker
       MYSQL_DATABASE: drupal
       MYSQL_USER: daniel
@@ -22,7 +21,7 @@ services:
 
   nginx:
     container_name: nginx
-    image: mis_img/loadbalancer:v2
+    image: mis_img/loadbalancer
     restart: always
     ports:
       - "9090:80"
@@ -30,7 +29,6 @@ services:
       drupal_stack:
         ipv4_address: 172.20.0.19
     environment:
-      TZ: Europe/Madrid
       WEB1: 172.20.0.20
       WEB2: 172.20.0.21
       WEB3: 172.20.0.22
